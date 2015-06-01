@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LocationCatScanner</string>
+    <string name="positionText">Your paws\'position is: </string>
+    <string name="positionValue">waiting for position</string>
+    <string name="getPositionButtonText">What\'s my paws\'position? </string>
+    <string name="action_settings">Settings</string>
+
+</resources>
