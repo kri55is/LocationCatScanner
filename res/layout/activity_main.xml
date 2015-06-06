@@ -8,39 +8,65 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.locationcatscanner.MainActivity" >
     
-<requestFocus />	
-	
+<requestFocus />
+
     <TextView
         android:id="@+id/positionValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="52dp"
         android:text="@string/positionValue" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/positionValue"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="92dp" >
+        android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
-            android:src="@drawable/network_off" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="46dp" >
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:src="@drawable/satellite_off" />
+            <Button
+                android:id="@+id/networkButton"
+                android:layout_width="wrap_content"
+                android:layout_height="115dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="0.4"
+                android:background="@drawable/networkbutton"
+               />
 
+            <Button
+                android:id="@+id/satelliteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="126dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginStart="40dp"
+                android:layout_weight="0.4"
+                android:background="@drawable/satellitebutton"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <Button
+                android:id="@+id/autoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="146dp"
+                android:layout_weight="0.4"
+                android:background="@drawable/autobutton"
+                />
+
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

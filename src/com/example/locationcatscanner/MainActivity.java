@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,11 +24,18 @@ public class MainActivity extends ActionBarActivity {
 	RelativeLayout mLayout = null;
 	
 	TextView mPositionValue = null;
-	ImageView mImageNetwork = null;
-	ImageView mImageSatellite = null;
+	Button mNetworkButton = null;
+	Button mSatelliteButton = null;
+	Button mAutoButton = null;
 
 	LocationManager locMan = null;
-
+	
+	boolean mGpsInUse = false;
+	boolean mNetworkInUse = false;
+	boolean mAutoInUse = true;
+	
+	LocationListener locListener;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 				.getSystemService(Context.LOCATION_SERVICE);
 
 		if (locMan != null) {
-			LocationListener locListener = new LocationListener() {
+			 locListener = new LocationListener() {
 
 				@Override
 				public void onStatusChanged(String provider, int status,
@@ -68,20 +77,38 @@ public class MainActivity extends ActionBarActivity {
 				}
 			};
 
-			locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.1f,
-					locListener);
-			locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.1f,
-					locListener);
 		} else {
 			Log.d(TAG, "locMan is null");
 		}
+		updateLocationManagerListener();
 
 		mPositionValue = (TextView) mLayout.findViewById(R.id.positionValue);
 		
-		mImageNetwork = (ImageView) mLayout.findViewById(R.id.imageView1);
-		mImageSatellite = (ImageView) mLayout.findViewById(R.id.imageView2);
-
-
+		mNetworkButton = (Button) mLayout.findViewById(R.id.networkButton);
+		mNetworkButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				forceNetworkUse();
+			}
+		});
+		mSatelliteButton = (Button) mLayout.findViewById(R.id.satelliteButton);
+		mSatelliteButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				forceSatelliteUse();
+			}
+		});
+		mAutoButton = (Button) mLayout.findViewById(R.id.autoButton);
+		mAutoButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				forceAutoUse();
+			}
+		});
+		mAutoButton.setPressed(true);
 		setContentView(mLayout);
 	}
 
@@ -105,27 +132,79 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	void updateLocationManagerListener(){
+		if (locMan == null) {
+			locMan = (LocationManager) this
+					.getSystemService(Context.LOCATION_SERVICE);
+		}
+		else{
+			locMan.removeUpdates(locListener);
+			if (mAutoInUse){
+				locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.1f,
+						locListener);
+				locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.1f,
+						locListener);
+			}
+			else{
+				if(mGpsInUse)
+					locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.1f,
+							locListener);
+				if(mNetworkInUse)
+					locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.1f,
+							locListener);
+			}
+		} 
+	}
 
+	void forceNetworkUse(){
+		mNetworkInUse = true;
+		mGpsInUse = false;
+		mAutoInUse = false;
+		updateLocationManagerListener();
+	}
+
+	void forceSatelliteUse(){
+		mNetworkInUse = false;
+		mGpsInUse = true;
+		mAutoInUse = false;
+		updateLocationManagerListener();
+	}
+
+	void forceAutoUse(){
+		mNetworkInUse = false;
+		mGpsInUse = false;
+		mAutoInUse = true;
+		updateLocationManagerListener();
+	}
+	
 	void networkOn(){
-		mImageNetwork.setImageResource(R.drawable.network);
+		if (!mNetworkInUse){
+		mNetworkInUse = true;
+		}
 	}
 	void networkOff(){
-		mImageNetwork.setImageResource(R.drawable.network_off);
+		if (mNetworkInUse){
+		mNetworkInUse = false;
+		}
 	}
 	
 	void gpsOff(){
-		mImageSatellite.setImageResource(R.drawable.satellite_off);		
+		if (mGpsInUse){
+			mGpsInUse = false;
+		}
 	}
 	
 	void gpsOn(){
-		mImageSatellite.setImageResource(R.drawable.satellite);
+		if (!mGpsInUse){
+			mGpsInUse = true;
+		}
 	}
 		
 	
 	public void printPosition(Location loc) {
 		String provider = loc.getProvider();
 		String position = "lat: " + loc.getLatitude() + " long "
-				+ loc.getLongitude();
+				+ loc.getLongitude() + provider;
 		
 		mPositionValue.setText(position);
 		
