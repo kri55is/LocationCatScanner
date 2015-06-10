@@ -11,9 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -22,9 +22,9 @@ public class MainActivity extends ActionBarActivity {
 	RelativeLayout mLayout = null;
 	
 	TextView mPositionValue = null;
-	ImageButton mNetworkButton = null;
-	ImageButton mSatelliteButton = null;
-	ImageButton mAutoButton = null;
+	ToggleButton mNetworkButton = null;
+	ToggleButton mSatelliteButton = null;
+	ToggleButton mAutoButton = null;
 
 	LocationManager locMan = null;
 	
@@ -33,6 +33,8 @@ public class MainActivity extends ActionBarActivity {
 	boolean mAutoInUse = true;
 	
 	LocationListener locListener;
+	
+	long MIN_TIME = 1000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
 
 		mPositionValue = (TextView) mLayout.findViewById(R.id.positionValue);
 		
-		mNetworkButton = (ImageButton) mLayout.findViewById(R.id.networkButton);
+		mNetworkButton = (ToggleButton) mLayout.findViewById(R.id.networkButton);
 		mNetworkButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -90,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
 				forceNetworkUse();
 			}
 		});
-		mSatelliteButton = (ImageButton) mLayout.findViewById(R.id.satelliteButton);
+		mSatelliteButton = (ToggleButton) mLayout.findViewById(R.id.satelliteButton);
 		mSatelliteButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -98,7 +100,7 @@ public class MainActivity extends ActionBarActivity {
 				forceSatelliteUse();
 			}
 		});
-		mAutoButton = (ImageButton) mLayout.findViewById(R.id.autoButton);
+		mAutoButton = (ToggleButton) mLayout.findViewById(R.id.autoButton);
 		mAutoButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -107,6 +109,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 		mAutoButton.setPressed(true);
+		mAutoButton.setChecked(true);
 		setContentView(mLayout);
 	}
 
@@ -138,17 +141,17 @@ public class MainActivity extends ActionBarActivity {
 		else{
 			locMan.removeUpdates(locListener);
 			if (mAutoInUse){
-				locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.1f,
+				locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, 0.1f,
 						locListener);
-				locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.1f,
+				locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, 0.1f,
 						locListener);
 			}
 			else{
 				if(mGpsInUse)
-					locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.1f,
+					locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, 0.1f,
 							locListener);
 				if(mNetworkInUse)
-					locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.1f,
+					locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, 0.1f,
 							locListener);
 			}
 		} 
@@ -159,6 +162,9 @@ public class MainActivity extends ActionBarActivity {
 		mGpsInUse = false;
 		mAutoInUse = false;
 		updateLocationManagerListener();
+		
+		mSatelliteButton.setChecked(false);
+		mAutoButton.setChecked(false);
 	}
 
 	void forceSatelliteUse(){
@@ -167,7 +173,8 @@ public class MainActivity extends ActionBarActivity {
 		mAutoInUse = false;
 		updateLocationManagerListener();
 		
-		//		mSatelliteButton.setImageResource(R.drawable.satellite);
+		mNetworkButton.setChecked(false);
+		mAutoButton.setChecked(false);
 	}
 
 	void forceAutoUse(){
@@ -175,28 +182,35 @@ public class MainActivity extends ActionBarActivity {
 		mGpsInUse = false;
 		mAutoInUse = true;
 		updateLocationManagerListener();
+		
+		mNetworkButton.setChecked(false);
+		mSatelliteButton.setChecked(false);
 	}
 	
 	void networkOn(){
 		if (!mNetworkInUse){
 		mNetworkInUse = true;
+		mNetworkButton.setChecked(true);
 		}
 	}
 	void networkOff(){
 		if (mNetworkInUse){
 		mNetworkInUse = false;
+		mNetworkButton.setChecked(false);
 		}
 	}
 	
 	void gpsOff(){
 		if (mGpsInUse){
 			mGpsInUse = false;
+			mSatelliteButton.setChecked(false);
 		}
 	}
 	
 	void gpsOn(){
 		if (!mGpsInUse){
 			mGpsInUse = true;
+			mSatelliteButton.setChecked(true);
 		}
 	}
 		
