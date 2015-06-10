@@ -33,7 +33,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginTop="46dp" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/networkButton"
                 android:layout_width="wrap_content"
                 android:layout_height="115dp"
@@ -43,7 +43,7 @@
                 android:background="@drawable/networkbutton"
                />
 
-            <Button
+            <ImageButton
                 android:id="@+id/satelliteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="126dp"
@@ -58,7 +58,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
-            <Button
+            <ImageButton
                 android:id="@+id/autoButton"
                 android:layout_width="wrap_content"
                 android:layout_height="146dp"

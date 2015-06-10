@@ -11,11 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-// TODO credit the icons <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,9 +22,9 @@ public class MainActivity extends ActionBarActivity {
 	RelativeLayout mLayout = null;
 	
 	TextView mPositionValue = null;
-	Button mNetworkButton = null;
-	Button mSatelliteButton = null;
-	Button mAutoButton = null;
+	ImageButton mNetworkButton = null;
+	ImageButton mSatelliteButton = null;
+	ImageButton mAutoButton = null;
 
 	LocationManager locMan = null;
 	
@@ -84,7 +82,7 @@ public class MainActivity extends ActionBarActivity {
 
 		mPositionValue = (TextView) mLayout.findViewById(R.id.positionValue);
 		
-		mNetworkButton = (Button) mLayout.findViewById(R.id.networkButton);
+		mNetworkButton = (ImageButton) mLayout.findViewById(R.id.networkButton);
 		mNetworkButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -92,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
 				forceNetworkUse();
 			}
 		});
-		mSatelliteButton = (Button) mLayout.findViewById(R.id.satelliteButton);
+		mSatelliteButton = (ImageButton) mLayout.findViewById(R.id.satelliteButton);
 		mSatelliteButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -100,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
 				forceSatelliteUse();
 			}
 		});
-		mAutoButton = (Button) mLayout.findViewById(R.id.autoButton);
+		mAutoButton = (ImageButton) mLayout.findViewById(R.id.autoButton);
 		mAutoButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -168,6 +166,8 @@ public class MainActivity extends ActionBarActivity {
 		mGpsInUse = true;
 		mAutoInUse = false;
 		updateLocationManagerListener();
+		
+		//		mSatelliteButton.setImageResource(R.drawable.satellite);
 	}
 
 	void forceAutoUse(){
